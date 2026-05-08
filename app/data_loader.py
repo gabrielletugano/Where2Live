@@ -13,8 +13,8 @@ RAW_DIR = Path(__file__).parent.parent / "data" / "raw"
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 
 NEIGHBORHOODS_GEOJSON_URL = (
-    "https://bostonopendata-boston.opendata.arcgis.com/datasets/"
-    "3525b0ee6e6b427f9aab5d0a1d0a1a28_0.geojson"
+    "https://raw.githubusercontent.com/codeforboston/neighborhood-finder/master/data/"
+    "neighborhoods.geojson"
 )
 
 CRIME_API_URL = "https://data.boston.gov/api/3/action/datastore_search"
@@ -29,13 +29,11 @@ MBTA_STOPS_URL = "https://api-v3.mbta.com/stops"
 
 
 def load_neighborhoods() -> gpd.GeoDataFrame:
-    """Load Boston neighborhood boundaries as a GeoDataFrame."""
-    cache = RAW_DIR / "neighborhoods.geojson"
+    cache = RAW_DIR / "Boston_Neighborhoods.geojson"
     if cache.exists():
         return gpd.read_file(cache)
-    gdf = gpd.read_file(NEIGHBORHOODS_GEOJSON_URL)
-    gdf.to_file(cache, driver="GeoJSON")
-    return gdf
+    raise FileNotFoundError("Download neighborhoods.geojson "
+                            "from data.boston.gov and place it in data/raw/")
 
 
 def load_crime(year: int = 2023) -> pd.DataFrame:
