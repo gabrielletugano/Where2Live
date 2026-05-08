@@ -55,13 +55,11 @@ def load_crime(year: int = 2023) -> pd.DataFrame:
 
 
 def load_parks() -> gpd.GeoDataFrame:
-    """Load Boston parks / open space as a GeoDataFrame."""
     cache = RAW_DIR / "parks.geojson"
     if cache.exists():
         return gpd.read_file(cache)
-    gdf = gpd.read_file(PARKS_GEOJSON_URL)
-    gdf.to_file(cache, driver="GeoJSON")
-    return gdf
+    raise FileNotFoundError("Download parks GeoJSON from data.boston.gov "
+                            "and place it in data/raw/parks.geojson")
 
 
 def load_mbta_stops(api_key: str | None = None) -> gpd.GeoDataFrame:
